@@ -5,14 +5,21 @@ import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
 import UpdateUserAvatarService from './UpdateUserAvatarService';
 
 
+let fakeUsersRepository: FakeUsersRepository;
+let fakeStorageProvider: FakeStorageProvider;
+let UpdateUserAvatar: UpdateUserAvatarService;
+
 describe('UpdateUserAvatar', () => {
-  it('should be able to create a new user', async () => {
-    const fakeUsersRepository = new FakeUsersRepository();
-    const fakeStorageProvider = new FakeStorageProvider();
-    const UpdateUserAvatar = new UpdateUserAvatarService(
+  beforeEach(() => {
+    fakeUsersRepository = new FakeUsersRepository();
+    fakeStorageProvider = new FakeStorageProvider();
+    UpdateUserAvatar = new UpdateUserAvatarService(
       fakeUsersRepository,
       fakeStorageProvider
     );
+  })
+  it('should be able to create a new user', async () => {
+
     const user = await fakeUsersRepository.create({
       name: 'tata',
       email: 'tata@gmail.com',
@@ -25,26 +32,14 @@ describe('UpdateUserAvatar', () => {
     expect(user.avatar).toBe('avatar.jpg');
   });
   it('should not be able to update avatar from non existing user', async () => {
-    const fakeUsersRepository = new FakeUsersRepository();
-    const fakeStorageProvider = new FakeStorageProvider();
-    const UpdateUserAvatar = new UpdateUserAvatarService(
-      fakeUsersRepository,
-      fakeStorageProvider
-    );
-    expect(UpdateUserAvatar.execute({
+
+    await expect(UpdateUserAvatar.execute({
       user_id: 'non-existing',
       avatarFilename: 'avatar.jpg'
     })).rejects.toBeInstanceOf(AppError);
   });
   it('should be delete old avatar when updating new one', async () => {
-    const fakeUsersRepository = new FakeUsersRepository();
-    const fakeStorageProvider = new FakeStorageProvider();
-
     const deleteFile = jest.spyOn(fakeStorageProvider, 'deleteFile');
-    const UpdateUserAvatar = new UpdateUserAvatarService(
-      fakeUsersRepository,
-      fakeStorageProvider
-    );
     const user = await fakeUsersRepository.create({
       name: 'tata',
       email: 'tata@gmail.com',
