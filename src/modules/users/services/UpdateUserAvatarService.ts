@@ -1,11 +1,10 @@
 import User from "../infra/typeorm/entities/User";
-import fs from 'fs'
-import uploadConfig from '@config/upload';
+
 import { injectable, inject } from 'tsyringe';
 import IUsersRepository from '../repositories/IUsersRepository';
 import IStorageProvider from '@shared/container/providers/StorageProvider/models/IStorageProvider';
 import AppError from '@shared/erros/AppError';
-import path from 'path'
+
 interface IRequest {
   user_id: string,
   avatarFilename: string

@@ -1,7 +1,9 @@
 import "reflect-metadata"
 import AppError from '@shared/erros/AppError';
-import CreateAppointmentService from './CreateAppointmentService';
+
 import FakeAppointmentsRepository from '../repositories/fakes/FakeAppointmentsRepository';
+import CreateAppointmentService from './CreateAppointmentService';
+
 
 let fakeAppointmentsRepository: FakeAppointmentsRepository;
 let createAppointment: CreateAppointmentService;
